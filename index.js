@@ -1,25 +1,6 @@
 var express = require('express');
-var http = require("http");
-var https = require("https");
+var request = require('request');
 var app = express();
-
-
-
-var checkForUser = function(name) {
-  http.get({
-    host: 'instagram.com',
-    path: name
-  }, function(res) {
-    var body = '';
-    res.on('data', function(d) {
-      body += d;
-    });
-    res.on('end', function(){
-      var parsed = JSON.stringify(body);
-      console.log(parsed);
-    })
-  })
-}
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -35,10 +16,20 @@ app.get('/', function(request, response) {
 
 app.get('/username/:id', function (req, res, next) {
   var username = req.params.id;
-  checkForUser(username);
-  res.render('pages/index', {
-    username: username
+  var message = "That username is available, register through the Instagram app.";
+  var url = "https://www.instagram.com/" + username;
+  // Check Instagram for username
+  request(url, function(err, res, body) {
+    if (res.statusCode === 200) {
+      // If the unsername is taken
+      message = "Username taken, enter email to be notified when it frees up.";
+    }
+    console.log(message);
   });
+  res.send("Whee");
+  // res.render('pages/username', {
+  //   response: parsed
+  // });
 });
 
 app.listen(app.get('port'), function() {
