@@ -4,8 +4,13 @@
   <% include ../partials/header.ejs %>
 </head>
 <body>
-  <h1>SOME BULLSHIT</h1>
-
-
+  <h1>Give me that Instagram Username</h1>
+  <form action="/" method="get">
+    <input type="text" name="username">
+    <input type="submit">
+  </form>
+  <p>
+    <%= response %>
+  </p>
 </body>
 </html>
