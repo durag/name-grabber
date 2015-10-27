@@ -17,30 +17,15 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res, next) {
   // If this is a user query, check for user
   if (req.query.username) {
-    var username = req.query.username;
-    var message = "That username is available, register through the Instagram app.";
-
-    checkForUsername(username, function(exists) {
-      if (exists) {
-        // Prompt for email
-        console.log("user exists");
-        res.render('pages/index', {
-          response: 'user exists'
-        });
-      } else {
-        // Redirect to register on Instagram
-        console.log("user NO exists");
-        res.render('pages/index', {
-          response: 'user does not exist'
-        });
-
-      }
+    checkForUsername(req.query.username, function(exists) {
+      res.render('pages/response', {
+        exists: exists,
+        username: username
+      });
     });
   // or just load the home page
   } else {
-    res.render('pages/index', {
-      response: 'nothing'
-    });
+    res.render('pages/index');
   }
 });
 
