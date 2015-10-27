@@ -17,9 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-// app.get('/', function(request, response) {
-//   response.render('pages/index');
-// });
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.NODEMAILER_ADR,
+        pass: process.env.NODEMAILER_PWD
+    }
+});
 
 app.get('/', function (req, res, next) {
   // If this is a user query, check for user
@@ -43,6 +47,8 @@ app.post('/email', function(req, res, next) {
     username: req.body.username,
     email: req.body.email
   } );
+
+  checkDatabase();
 });
 
 // Check Instagram to see if user exists
@@ -65,18 +71,26 @@ function checkDatabase() {
       throw err;
     }
     var current;
-    console.log(result);
     for (var i = 0; i < result.length; i++) {
-      current = result[i].username;
-      console.log(current);
-      checkForUsername(current, function(exists) {
+      current = result[i];
+      checkForUsername(current.username, function(exists) {
         if(!exists) {
           // Notify the user via his email
-          console.log("Notify user of availability: " + current);
+          transporter.sendMail({
+              from: 'willthefirst@gmail.com',
+              to: current.email,
+              subject: '@' + current.username + ' is now available!',
+              text: '@' + current.username + ' is now available! Claim it with in the app: https://itunes.apple.com/app/instagram/id389801252?pt=428156&ct=igweb.unifiedHome.badge&mt=8'
+          }, function(err, info) {
+            if (err) {
+              console.log(err);
+              throw err;
+            }
+          });
           // Remove this user from the DB
-          db.collection('users').remove( { username : current } )
+          db.collection('users').remove( { username : current.username } )
         } else {
-          console.log("still taken :( = " + current);
+          // User still unavailable;
         }
       })
     }
@@ -86,7 +100,8 @@ function checkDatabase() {
 // Check stuff every 60 minutes
 var checkStuff = setInterval(function(str1, str2) {
   checkDatabase();
-}, 60 * 60 * 1000 );
+  console.log('ding');
+}, (60 * 60 * 1000) );
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
