@@ -1,7 +1,7 @@
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
-var db = require('mongoskin').db('mongodb://localhost:27017/test');
+var db = require('mongoskin').db(process.env.DATABASE_URL);
 var nodemailer = require('nodemailer');
 var app = express();
 
