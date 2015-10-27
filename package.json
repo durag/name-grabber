@@ -25,6 +25,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "mongodb": "^2.0.46",
+    "mongoskin": "^2.0.3",
     "nodemon": "^1.7.1",
     "request": "^2.65.0"
   }

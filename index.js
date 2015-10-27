@@ -1,6 +1,8 @@
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
+var db = require('mongoskin').db('mongodb://localhost:27017/test');
+var nodemailer = require('nodemailer');
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -36,9 +38,11 @@ app.get('/', function (req, res, next) {
 
 // Handles email submissions
 app.post('/email', function(req, res, next) {
-  res.send(req.body.email);
   // Add email to database
-
+  db.collection('users').insertOne( {
+    username: req.body.username,
+    email: req.body.email
+  } );
 });
 
 // Check Instagram to see if user exists
@@ -54,16 +58,35 @@ function checkForUsername(username, cb) {
   });
 }
 
-// Check database 2x / day
+// Checks database
 function checkDatabase() {
-  for (var i = 0; i < usernames.length; i++) {
-    checkForUsernames(usernames[i], function(exists) {
-      if(exists) {
-        // if exists, email users email and remove this userns email from the database
-      }
-    })
-  }
+  db.collection('users').find().toArray(function(err, result) {
+    if (err) {
+      throw err;
+    }
+    var current;
+    console.log(result);
+    for (var i = 0; i < result.length; i++) {
+      current = result[i].username;
+      console.log(current);
+      checkForUsername(current, function(exists) {
+        if(!exists) {
+          // Notify the user via his email
+          console.log("Notify user of availability: " + current);
+          // Remove this user from the DB
+          db.collection('users').remove( { username : current } )
+        } else {
+          console.log("still taken :( = " + current);
+        }
+      })
+    }
+  });
 }
+
+// Check stuff every 60 minutes
+var checkStuff = setInterval(function(str1, str2) {
+  checkDatabase();
+}, 60 * 60 * 1000 );
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
