@@ -1,10 +1,15 @@
 var express = require('express');
 var request = require('request');
+var bodyParser = require('body-parser');
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
+
+// for parsing POST requests
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -20,7 +25,7 @@ app.get('/', function (req, res, next) {
     checkForUsername(req.query.username, function(exists) {
       res.render('pages/response', {
         exists: exists,
-        username: username
+        username: req.query.username
       });
     });
   // or just load the home page
@@ -31,8 +36,7 @@ app.get('/', function (req, res, next) {
 
 // Handles email submissions
 app.post('/email', function(req, res, next) {
-  console.log(req.params.email);
-
+  res.send(req.body.email);
   // Add email to database
 
 });

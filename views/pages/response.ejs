@@ -8,9 +8,9 @@
   <% if (exists) { %>
       <h2>The username <%= username %> is taken.</h2>
       <h3>Enter your email below and we'll notify you when it becomes available.</h3>
-      <form action="/email">
+      <form action="/email" method="post">
         <label for="email"></label>
-        <input type="email" placeholder="something@email.com">
+        <input type="email" name="email" placeholder="something@email.com">
         <input type="submit">
       </form>
   <% } else { %>
