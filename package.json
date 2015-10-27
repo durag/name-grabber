@@ -1,5 +1,5 @@
 {
-  "name": "Instagram Checker",
+  "name": "instagram-checker",
   "version": "0.0.1",
   "description": "Helps you claim that Instagram username you want.",
   "main": "index.js",
