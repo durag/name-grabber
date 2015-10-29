@@ -47,8 +47,9 @@ app.post('/email', function(req, res, next) {
     username: req.body.username,
     email: req.body.email
   } );
-
-  checkDatabase();
+  res.render('pages/thanks', {
+    username: req.body.username
+  });
 });
 
 // Check Instagram to see if user exists
