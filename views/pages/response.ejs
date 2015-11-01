@@ -4,19 +4,21 @@
   <% include ../partials/header.ejs %>
 </head>
 <body>
-  <h1>Give me that Instagram Username</h1>
-  <% if (exists) { %>
-      <h2>The username <%= username %> is taken.</h2>
-      <h3>Enter your email below and we'll notify you when it becomes available.</h3>
-      <form action="/email" method="post">
-        <label for="email"></label>
-        <input type="email" name="email" placeholder="something@email.com">
-        <input type="hidden" name="username" value="<%= username %>">
-        <input type="submit">
-      </form>
-  <% } else { %>
-    <h2>The username <%= username %> is free!</h2>
-    <h3>...so claim it on <a href="https://www.instagram.com">Instagram</a></h3>
-  <% } %>
+  <div class="container">
+    <h1>Claim That Instagram Username</h1>
+    <% if (exists) { %>
+        <h2>The username @<%= username %> is taken.</h2>
+        <p class="prompt">Enter your email below and we'll notify you when it becomes available.</p>
+        <form action="/email" method="post">
+          <label for="email"></label>
+          <input type="email" name="email" placeholder="something@email.com">
+          <input type="hidden" name="username" value="<%= username %>">
+          <input type="submit">
+        </form>
+    <% } else { %>
+      <h2>The username <%= username %> is free!</h2>
+      <h3>...so claim it on <a href="https://www.instagram.com">Instagram</a></h3>
+    <% } %>
+  </div>
 </body>
 </html>

@@ -51,6 +51,18 @@ app.post('/email', function(req, res, next) {
     username: req.body.username,
     email: req.body.email
   } );
+  // Confirm registration via email
+  transporter.sendMail({
+      from: 'willthefirst@gmail.com',
+      to: req.body.email,
+      subject: "We're now watching @" + req.body.username + " for you",
+      html: "<p>Yo,</p><p>You just registered the username @" + req.body.username + " using my service Claim That Instagram Username. I'll send you an email when it becomes available.</p><p>Thanks,</p><p>Will</p>"
+  }, function(err, info) {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+  });
   res.render('pages/thanks', {
     username: req.body.username
   });
