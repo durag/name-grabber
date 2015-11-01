@@ -1,3 +1,7 @@
+var config = {
+  checkInterval: (1/60) // Interval to ping Instagram for usernames, in  minutes
+}
+
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
@@ -16,6 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+console.log("Database URL is " + process.env.DATABASE_URL);
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -101,8 +107,8 @@ function checkDatabase() {
 // Check stuff every 60 minutes
 var checkStuff = setInterval(function(str1, str2) {
   checkDatabase();
-  console.log('ding');
-}, (60 * 60 * 1000) );
+  console.log('Database checked.');
+}, (config.checkInterval * 60 * 1000) );
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
