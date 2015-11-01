@@ -1,5 +1,5 @@
 var config = {
-  checkInterval: (1/60) // Interval to ping Instagram for usernames, in  minutes
+  checkInterval: (12*60) // Interval to ping Instagram for usernames, in  minutes
 }
 
 var express = require('express');
@@ -20,8 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-
-console.log("Database URL is " + process.env.DATABASE_URL);
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -86,8 +84,8 @@ function checkDatabase() {
           transporter.sendMail({
               from: 'willthefirst@gmail.com',
               to: current.email,
-              subject: '@' + current.username + ' is now available!',
-              text: '@' + current.username + ' is now available! Claim it with in the app: https://itunes.apple.com/app/instagram/id389801252?pt=428156&ct=igweb.unifiedHome.badge&mt=8'
+              subject: '@' + current.username + ' is now available on Instagram!',
+              html: '<p>Yo,</p><p>The username @' + current.username + ' is now available on Instagram! Claim it using the Instagram app.</p><p>Thanks,</p><p>Will</p>'
           }, function(err, info) {
             if (err) {
               console.log(err);
@@ -107,7 +105,6 @@ function checkDatabase() {
 // Check stuff every 60 minutes
 var checkStuff = setInterval(function(str1, str2) {
   checkDatabase();
-  console.log('Database checked.');
 }, (config.checkInterval * 60 * 1000) );
 
 app.listen(app.get('port'), function() {
