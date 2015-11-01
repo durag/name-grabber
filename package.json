@@ -1,7 +1,7 @@
 {
-  "name": "instagram-checker",
+  "name": "name-grabber",
   "version": "0.0.1",
-  "description": "Helps you claim that Instagram username you want.",
+  "description": "Helps you get Instagram usernames.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

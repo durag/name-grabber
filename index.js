@@ -55,8 +55,8 @@ app.post('/email', function(req, res, next) {
   transporter.sendMail({
       from: 'willthefirst@gmail.com',
       to: req.body.email,
-      subject: "We're now watching @" + req.body.username + " for you",
-      html: "<p>Yo,</p><p>You just registered the username @" + req.body.username + " using my service Claim That Instagram Username. I'll send you an email when it becomes available.</p><p>Thanks,</p><p>Will</p>"
+      subject: "Name Grabber is now watching @" + req.body.username + " for you",
+      html: "<p>Yo,</p><p>You just registered the username @" + req.body.username + " with Name Grabber. I'll send you an email when it becomes available.</p><p>Thanks,</p><p>Will</p>"
   }, function(err, info) {
     if (err) {
       console.log(err);
